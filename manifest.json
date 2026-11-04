@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "xvvhang.focus-titlebars",
+  "name": "Focus Titlebars",
+  "version": "1.0.0",
+  "author": "alec",
+  "license": "BSD-3-Clause AND MIT",
+  "description": "Focus-only sliding titlebars for floating workspaces; automatically builds and manages its native extension without Hyprland config changes.",
+  "kinds": ["service"],
+  "entryPoints": { "service": "Service.qml" }
+}

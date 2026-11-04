@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+*.so
+*.o
+*.log
+.DS_Store
