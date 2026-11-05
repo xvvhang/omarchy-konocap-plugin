@@ -40,6 +40,16 @@ omarchy plugin update konochi.konocap
 omarchy-shell konochi.konocap status
 ```
 
+To uninstall, disable the plugin to restore stock titlebars, then remove it:
+
+```sh
+omarchy plugin disable konochi.konocap
+omarchy plugin remove konochi.konocap
+```
+
+Back up unpushed changes first: removal deletes the plugin checkout. Cached
+builds may remain in `~/.cache/omarchy-focus-titlebars/`.
+
 Optional: add `showDuration` and `hideDuration` to the existing `konochi.konocap`
 entry in `~/.config/omarchy/shell.json`. Values are milliseconds (0–290); restart
 the plugin to apply. Defaults need no configuration.
