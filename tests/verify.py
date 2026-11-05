@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('library', type=Path)
 args = parser.parse_args()
 library = args.library.resolve()
+expected_version = json.loads((ROOT / 'manifest.json').read_text())['version']
 artifacts = Path('/tmp/opencode/focus-titlebars-service-tests')
 artifacts.mkdir(parents=True, exist_ok=True)
 parent_signature = os.environ['HYPRLAND_INSTANCE_SIGNATURE']
@@ -149,6 +150,8 @@ end
         for _ in range(3):
             result = ctl('plugin', 'load', str(library))
             assert 'focus-titlebars' in names(), result
+            native = next(p for p in json.loads(ctl('plugin', 'list', '-j')) if p['name'] == 'focus-titlebars')
+            assert native['version'] == expected_version, native
             activate()
             assert not stock_enabled()
             focus(b)
@@ -248,7 +251,7 @@ end
             if 'focus-titlebars' in names() and not stock_enabled(): break
             time.sleep(.1)
         assert not stock_enabled() and 'focus-titlebars' in names()
-        status = subprocess.check_output(['qs', 'ipc', '-p', str(shell_config), 'call', 'alec.focus-titlebars', 'status'], env=env, text=True)
+        status = subprocess.check_output(['qs', 'ipc', '-p', str(shell_config), 'call', 'konochi.konocap', 'status'], env=env, text=True)
         assert json.loads(status)['state'] == 'active', status
         subprocess.run(['qs', 'ipc', '-p', str(shell_config), 'call', 'test', 'unload'], env=env, check=True, capture_output=True)
         for _ in range(60):

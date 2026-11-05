@@ -1,4 +1,4 @@
-"""Omarchy service lifetime -> native extension lease. No Hyprland file writes."""
+"""Konocap: Omarchy service lifetime -> native lease. No Hyprland file writes."""
 from __future__ import annotations
 
 import argparse
@@ -14,6 +14,9 @@ import sys
 ROOT = Path(__file__).resolve().parent
 STOCK = Path("/usr/lib/omarchy-hyprland-titlebars/titlebars.so")
 NAME = "focus-titlebars"
+# Keep native/cache/lock identifiers stable across the branding migration.
+PLUGIN_ID = "konochi.konocap"
+LEGACY_IDS = ("xvvhang.focus-titlebars", "alec.focus-titlebars")
 
 
 def ctl(*args: str) -> str:
@@ -43,7 +46,12 @@ def configured_settings() -> dict:
     config_home = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
     try:
         document = json.loads((config_home / "omarchy/shell.json").read_text())
-        return next((p for p in document.get("plugins", []) if isinstance(p, dict) and p.get("id") == "alec.focus-titlebars"), {})
+        entries = document.get("plugins", [])
+        for plugin_id in (PLUGIN_ID, *LEGACY_IDS):
+            entry = next((p for p in entries if isinstance(p, dict) and p.get("id") == plugin_id), None)
+            if entry is not None:
+                return entry
+        return {}
     except (OSError, ValueError, TypeError):
         return {}
 

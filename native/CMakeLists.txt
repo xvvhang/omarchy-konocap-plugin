@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
-project(omarchy-focus-titlebars LANGUAGES CXX)
+project(konochi-konocap VERSION 1.1.0 LANGUAGES CXX)
+# Preserve the native library name for lifecycle/cache compatibility.
 set(CMAKE_CXX_STANDARD 23)
 add_library(focus-titlebars SHARED main.cpp barDeco.cpp BarPassElement.cpp appName.cpp)
 set_target_properties(focus-titlebars PROPERTIES PREFIX "")

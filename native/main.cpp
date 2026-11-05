@@ -159,9 +159,9 @@ APICALL EXPORT std::string PLUGIN_API_VERSION() { return HYPRLAND_API_VERSION; }
 
 APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
   if (std::string(__hyprland_api_get_hash()) != __hyprland_api_get_client_hash())
-    throw std::runtime_error("Focus Titlebars: Hyprland ABI mismatch");
+    throw std::runtime_error("Konocap: Hyprland ABI mismatch");
   if (!stockAvailable())
-    throw std::runtime_error("Focus Titlebars: stock Omarchy titlebars must be loaded first");
+    throw std::runtime_error("Konocap: stock Omarchy titlebars must be loaded first");
   OMARCHY_FLOATING_PHANDLE = handle;
   active = syncing = captured = stockRequested = false;
   g_pOmarchyFloatingGlobalState = makeUnique<SOmarchyFloatingGlobalState>();
@@ -214,7 +214,7 @@ APICALL EXPORT PLUGIN_DESCRIPTION_INFO PLUGIN_INIT(HANDLE handle) {
   static auto properties = Event::bus()->m_events.config.props_refreshed.listen([](bool) { syncStock(true); });
   for (auto &window : Desktop::windowState()->windows())
     if (validMapped(window)) newWindow(window);
-  return {"focus-titlebars", "Focus-only animated floating titlebars (Omarchy managed)", "alec", "1.0.0"};
+  return {"focus-titlebars", "Konocap: focus-only animated floating titlebars", "alec", "1.1.0"};
 }
 
 APICALL EXPORT void PLUGIN_EXIT() {

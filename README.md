@@ -1,4 +1,9 @@
-# Focus Titlebars
+# Konocap
+
+Part of **Konochi**, a personal Omarchy plugin series by Alec Xu.
+
+**Konocap 1.1.0** · Formerly Focus Titlebars. A focus-aware "cap" for floating
+windows, complementing Konospaces and Konoview.
 
 An Omarchy service plugin that shows floating-window titlebars **only on the
 active window**, sliding them out of—and back into—the window's top edge.
@@ -30,7 +35,7 @@ Tested with:
 
 | Component | Version |
 | --- | --- |
-| Omarchy | 4.5.0rc3-1 |
+| Omarchy | **4.5.0-3 (stable)**; also tested on 4.5.0rc3-1 |
 | Hyprland, Lua configuration | 0.56.2-4 |
 | `omarchy-hyprland-titlebars` | 0.2.2-2 |
 
@@ -52,37 +57,63 @@ leaves stock titlebars unchanged.
 ## Install
 
 ```sh
-omarchy plugin add https://github.com/xvvhang/omarchy-focus-titlebars-plugin.git --enable
+omarchy plugin add https://github.com/xvvhang/omarchy-konocap-plugin.git --enable
 ```
 
-Omarchy installs the plugin as **`alec.focus-titlebars`**, the ID in its manifest.
+Omarchy installs the plugin as **`konochi.konocap`**, the ID in its manifest.
 The first activation may take a little longer while the native extension builds.
+
+The repository is `xvvhang/omarchy-konocap-plugin`. GitHub redirects the previous
+`omarchy-focus-titlebars-plugin` URL; new installations should use the URL above.
 
 ### Enable / disable
 
 Use Omarchy's plugin manager, or:
 
 ```sh
-omarchy plugin enable alec.focus-titlebars
-omarchy plugin disable alec.focus-titlebars
+omarchy plugin enable konochi.konocap
+omarchy plugin disable konochi.konocap
 ```
 
 Disabling restores the stock behavior; no Hyprland configuration cleanup is
 needed. Update through Omarchy's plugin manager:
 
 ```sh
-omarchy plugin update alec.focus-titlebars
+omarchy plugin update konochi.konocap
 ```
 
 ### Status
 
 ```sh
-omarchy-shell alec.focus-titlebars status
+omarchy-shell konochi.konocap status
 ```
 
 An active service reports its cached library path, manager PID, and animation
 durations. During the first build it reports `building`; a startup failure
 reports `error`.
+
+### Upgrading from Focus Titlebars 1.0.0
+
+The plugin and IPC ID changed to `konochi.konocap`. Before updating an existing
+installation, disable its legacy ID (`xvvhang.focus-titlebars` or
+`alec.focus-titlebars`) through Omarchy. After updating the files:
+
+1. Rename the installed plugin directory to `konochi.konocap` if it still uses
+   the old name. Do not leave two copies of the same repository installed.
+2. Replace the legacy entry in `shell.json` with `konochi.konocap`, retaining any
+   custom duration settings, and remove duplicate legacy enablement entries.
+3. Enable `konochi.konocap` and use its new status command above.
+
+For existing Git checkouts, update the remote to the new repository URL:
+
+```sh
+git remote set-url origin https://github.com/xvvhang/omarchy-konocap-plugin.git
+```
+
+Native module/library (`focus-titlebars`) and cache/lock names intentionally stay
+unchanged: the branding migration does not change lifecycle ownership or create
+a second independent native module. The service can still read legacy duration
+settings if no canonical entry exists. No Hyprland configuration edits are needed.
 
 ## Optional settings
 
@@ -91,7 +122,7 @@ to the **existing** plugin entry in `~/.config/omarchy/shell.json`:
 
 ```json
 {
-  "id": "alec.focus-titlebars",
+  "id": "konochi.konocap",
   "showDuration": 180,
   "hideDuration": 120
 }
@@ -132,13 +163,14 @@ exit; the next activation removes it before loading the current build.
 All implementation and test code lives in the installed plugin directory:
 
 ```text
-alec.focus-titlebars/
+konochi.konocap/
 ├── manifest.json
 ├── Service.qml             # Omarchy lifecycle and status IPC
 ├── manager.py              # Build cache, loading, ownership, cleanup
 ├── native/                 # Native rendering, lifecycle, CMake, upstream licenses
 ├── tests/                  # Isolated lifecycle and rendering tests
 ├── LICENSE
+├── CHANGELOG.md
 └── README.md
 ```
 
@@ -157,7 +189,7 @@ version header. Builds never overwrite an already mapped `.so`.
 
 1. Check the status command above.
 2. Inspect the cached `build.log` if compilation failed.
-3. Inspect Shell logs for messages containing `Focus Titlebars`.
+3. Inspect Shell logs for messages containing `Konocap`.
 4. Disable the plugin to restore stock behavior immediately.
 
 After a Hyprland upgrade, restart the desktop session so the running compositor
@@ -170,6 +202,7 @@ From the repository directory:
 
 ```sh
 omarchy plugin validate .
+python3 -m unittest discover -s tests -p 'test_*.py'
 python3 manager.py --build-only
 python3 tests/verify.py /path/printed/by/build-only/focus-titlebars.so
 ```

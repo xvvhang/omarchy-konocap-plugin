@@ -25,17 +25,17 @@ Item {
                 try {
                     root.state = JSON.parse(data)
                 }
-                catch (error) { console.warn("Focus Titlebars: invalid manager status") }
+                catch (error) { console.warn("Konocap: invalid manager status") }
             }
         }
-        stderr: SplitParser { onRead: data => console.warn("Focus Titlebars:", data) }
+        stderr: SplitParser { onRead: data => console.warn("Konocap:", data) }
         onExited: (code, status) => {
             if (code !== 0) root.state = { state: "error", exitCode: code }
         }
     }
 
     IpcHandler {
-        target: "alec.focus-titlebars"
+        target: "konochi.konocap"
         function status(): string { return JSON.stringify(root.state) }
     }
 
